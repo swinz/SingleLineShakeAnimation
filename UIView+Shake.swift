@@ -52,7 +52,7 @@ extension UIView {
 
     }
 
-    public func postAccessabilityNotification(#text : String ) {
+    public func postAccessabilityNotification(text text : String ) {
         var hasRead = false
         NSNotificationCenter.defaultCenter().addObserverForName(UIAccessibilityAnnouncementDidFinishNotification, object: nil , queue: nil) { (notification) -> Void in
             if hasRead == false {
@@ -62,7 +62,7 @@ extension UIView {
             }
         }
         // seems to be a bug with UIAccessability that does not allow to post a notification with text in the action when tapping a button
-        dispatch(after:0.01) {
+        dispatch(after: 0.01, queue: dispatch_get_main_queue()) { () -> Void in
             UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, " ")
         }
     }
@@ -73,7 +73,7 @@ extension UIView {
         })
     }
 
-    private func shake(#forTimes: Int, position: ShakePosition, durationPerShake: NSTimeInterval, completion: (() -> Void)?) {
+    private func shake(forTimes forTimes: Int, position: ShakePosition, durationPerShake: NSTimeInterval, completion: (() -> Void)?) {
         UIView.animateWithDuration(durationPerShake, animations: { () -> Void in
 
             switch position.direction {
@@ -99,11 +99,11 @@ extension UIView {
 
 }
 
-private func dispatch(#after: NSTimeInterval, closure: dispatch_block_t) {
-    dispatch(after: after, closure: closure)
+private func dispatch(after after: NSTimeInterval, closure: dispatch_block_t) {
+    dispatch(after: after, queue: dispatch_get_main_queue(), closure: closure)
 }
 
-private func dispatch(#after: NSTimeInterval, queue: dispatch_queue_t = dispatch_get_main_queue(), #closure: dispatch_block_t) {
+private func dispatch(after after: NSTimeInterval, queue: dispatch_queue_t = dispatch_get_main_queue(), closure: dispatch_block_t) {
     let time = dispatch_time(DISPATCH_TIME_NOW, Int64(after) * Int64(NSEC_PER_SEC))
     dispatch_after(time, dispatch_get_main_queue(), closure)
 }
